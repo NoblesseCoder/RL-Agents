@@ -1,5 +1,5 @@
 import numpy as np
-from agent import Agent
+from tabular.agent import Agent
 
 class EpsilonGreedyAgent(Agent):
 	""" 
