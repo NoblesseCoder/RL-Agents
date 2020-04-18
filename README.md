@@ -1,6 +1,11 @@
 # RL-Agents
 The repo contains implementations of various Reinforcement Learning Agents.
 
+### Prerequisite Installations
+
+1. [Install Gym](https://gym.openai.com/docs/)
+2. [Install gym-karmedbandits](https://github.com/NoblesseCoder/gym-karmedbandits)
+
 
 ### Basic Agents
 
