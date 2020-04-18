@@ -7,23 +7,24 @@ class EpsilonGreedyAgent(Agent):
 	Algorithm: Agent selects action based on epsilon greedy method
 	"""
 
-	def __init__(self, action_space, epsilon=0.01):
-		Agent.__init__(action_space)
+	def __init__(self, action_space, n_actions, epsilon=0.1):
+		self.n_actions = n_actions
 		self.epsilon = epsilon
+		self.reward_history = []
 		self.action_history = []
-		self.rewards_history = []
+		Agent.__init__(self, action_space)
 
-	def explore_act(self):
+	def explore_act(self, state, reward, done):
 		# Exploration (non-greedy): choose action randomly from the action space
-		action = Agent.act()
+		action = Agent.act(self,state, reward, done)
 		return action
 
 	def _action_val_estimation_SAM(self, action, time_step):
 		# Action value estimation via Sample Average Method (SAM)
 		numerator, denominator = 0, 0
 		for t in range(time_step):
-			predicate = (action == self.ac)
-			numerator += rewards_history[t] * predicate
+			predicate = (action == self.action_history[t])
+			numerator += self.reward_history[t] * predicate
 			denominator += predicate
 		if (denominator == 0):
 			return 0
@@ -33,18 +34,18 @@ class EpsilonGreedyAgent(Agent):
 	def exploit_act(self, time_step):
 		# Exploitation (greedy): choose action with max estimated action value 
 		estimated_action_vals = []
-		for action in self.action_space:
+		for action in range(self.n_actions):
 			estimated_action_vals.append(self._action_val_estimation_SAM(action,time_step))
 		action_ind = np.argmax(np.array(estimated_action_vals))
-		return(self.action_space[action_ind])	
+		return(action_ind)	
 
-	def act(self, time_step, reward, done):
+	def act(self, state, time_step, reward, done):
 		# Return chosen action 
-		action_type = self.is_exploit()
 		if(np.random.rand() < self.epsilon):
-			action = self.explore_act()
+			action = self.explore_act(state, reward, done)
 		else:
 			action = self.exploit_act(time_step)
+		self.reward_history.append(reward)
 		self.action_history.append(action)
-		self.rewards_history.append(reward)
+		#print(self.action_history)
 		return action
