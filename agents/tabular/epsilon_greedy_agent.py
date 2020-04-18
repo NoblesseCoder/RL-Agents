@@ -21,15 +21,13 @@ class EpsilonGreedyAgent(Agent):
 
 	def _action_val_estimation_SAM(self, action, time_step):
 		# Action value estimation via Sample Average Method (SAM)
-		numerator, denominator = 0, 0
-		for t in range(time_step):
-			predicate = (action == self.action_history[t])
-			numerator += self.reward_history[t] * predicate
-			denominator += predicate
+
+		numerator = np.sum([self.reward_history[i] for i in range(len(self.reward_history)) if self.action_history[i]==action])
+		denominator = np.sum([self.action_history[i]==action for i in range(len(self.action_history))])
+
 		if (denominator == 0):
-			return 0
-		q_value = numerator/denominator	
-		return q_value 
+			return 0	
+		return(numerator/denominator) 
 
 	def exploit_act(self, time_step):
 		# Exploitation (greedy): choose action with max estimated action value 

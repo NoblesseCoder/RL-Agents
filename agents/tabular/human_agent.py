@@ -7,7 +7,7 @@ class HumanAgent(Agent):
 	"""
 
 	def __init__(self, action_space):
-		Agent.__init__(action_space)
+		Agent.__init__(self, action_space)
 
 	def act(self, state, reward, done):
 		# Return chosen action 
