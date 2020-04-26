@@ -11,7 +11,7 @@ The repo contains implementations of various Reinforcement Learning Agents.
 
 1. [Random agent (default)](./agents/tabular/agent.py)
 2. [Human agent](./agents/tabular/human_agent.py)
-3. [Basic ε-greedy agent](./agents/tabular/epsilon_greedy_agent.py) [(Demo)](./demo/epsilon_greedy_agent_demo.py)
+3. [Basic ε-greedy agent](./agents/tabular/epsilon_greedy_agent.py) [(Demo)](./demo/stationary_MAB_problem.py)
 
 ### References
 
