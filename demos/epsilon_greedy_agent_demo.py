@@ -5,17 +5,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
 sys.path.append('../agents')
-from tabular.epsilon_greedy_agent import EpsilonGreedyAgent 
-from tabular.agent import Agent
+from tabular.epsilon_greedy_agent import EpsilonGreedyAgent
+from tabular.upper_confidence_bound_agent import UpperConfidenceBoundAgent 
 
 sns.set(color_codes=True, style="whitegrid")
 
 
-def train_epsilon_greedy_agent(env, epsilon, init_bias, episodes):
+def train(env, agent, epsilon, init_bias, episodes):
 	''' Function trains the ε-Greedy agent on the environment'''
 
 	# Instantiating the epsilon greedy agent
-	agent = EpsilonGreedyAgent(env.action_space, env.k, epsilon, init_bias)
+	agent.reset_memory(epsilon, init_bias)
 	reward = 0
 	prev_state = env.reset()
 	done = False
@@ -38,47 +38,64 @@ def train_epsilon_greedy_agent(env, epsilon, init_bias, episodes):
 	return(np.array(average_rewards), np.array(total_rewards))
 
 
-def run(env, init_bias, episodes, epsilons):
+def run_train_for_different_epsilons(env, agent, init_bias, episodes, epsilons):
 	''' Runs training for multiple epsilon values'''
 
 	average_rewards_for_respective_epsilons = []
 	total_rewards_for_respective_epsilons = []
 
-	for epsilon in range(len(epsilons)):
-		rewards = train_epsilon_greedy_agent(env, epsilons[epsilon], init_bias, episodes)
+	for ind in range(len(epsilons)):
+		rewards = train(env, agent, epsilons[ind], init_bias, episodes)
 		average_rewards_for_respective_epsilons.append(rewards[0]) 
 		total_rewards_for_respective_epsilons.append(rewards[1])
 
-	return(np.array(average_rewards_for_respective_epsilons), np.array(total_rewards_for_respective_epsilons))	
+	return(np.array(average_rewards_for_respective_epsilons), np.array(total_rewards_for_respective_epsilons))
 
+ 
 
-
-# Creating the Multi Armed Bandits gym environment
+# Creating the Multi Armed Bandits(MAB) gym environment
 env = gym.make('KArmedBandits-v0')
 env.seed(0)
 
+# Instantiating Agent 
+epsilon_greedy_agent = EpsilonGreedyAgent(env.action_space, env.k, None, None)
+ucb_greedy_agent = UpperConfidenceBoundAgent(env.action_space, env.k, None, None, 2)
 
+# Initializing Parameters
 epsilons = [0, 0.01, 0.5, 0.1]
 init_bias = 0
-episodes = 1000
-num_runs = 2000
+episodes = 2000
+num_runs = 1
 
 # Running multiple runs of training for multiple epsilon values
-avg_rewards_for_epsilons_over_num_runs = []
-for i in range(num_runs):
-	avg_reward_for_epsilons = run(env, init_bias, episodes,epsilons)[0]
-	avg_rewards_for_epsilons_over_num_runs.append(avg_reward_for_epsilons)
+avg_rewards_for_epsilons_over_num_runs_epsilon_greedy = []
+avg_rewards_for_epsilons_over_num_runs_ucb_greedy = []
 
-avg_rewards_for_epsilons_over_num_runs = np.array(avg_rewards_for_epsilons_over_num_runs)
-avg_of_avg_rewards_for_epsilons_over_num_runs = np.mean(avg_rewards_for_epsilons_over_num_runs, axis=0)
+for i in range(num_runs):
+	print("Run:" + str(i+1))
+	avg_reward_for_epsilons_epsilon_greedy = run_train_for_different_epsilons(env, epsilon_greedy_agent, init_bias, episodes,epsilons)[0]
+	avg_reward_for_epsilons_ucb_greedy = run_train_for_different_epsilons(env, ucb_greedy_agent, init_bias, episodes,epsilons)[0]
+	avg_rewards_for_epsilons_over_num_runs_epsilon_greedy.append(avg_reward_for_epsilons_epsilon_greedy)
+	avg_rewards_for_epsilons_over_num_runs_ucb_greedy.append(avg_reward_for_epsilons_ucb_greedy)
+
+avg_rewards_for_epsilons_over_num_runs_epsilon_greedy = np.array(avg_rewards_for_epsilons_over_num_runs_epsilon_greedy)
+avg_of_avg_rewards_for_epsilons_over_num_runs_epsilon_greedy = np.mean(avg_rewards_for_epsilons_over_num_runs_epsilon_greedy, axis=0)
+
+avg_rewards_for_epsilons_over_num_runs_ucb_greedy = np.array(avg_rewards_for_epsilons_over_num_runs_ucb_greedy)
+avg_of_avg_rewards_for_epsilons_over_num_runs_ucb_greedy = np.mean(avg_rewards_for_epsilons_over_num_runs_ucb_greedy, axis=0)
 
 
 # Visualisation of results
+plt.title("Stationary MAB problem (Average reward v/s Episodes plot)")
 plt.xlabel("Episodes")
 plt.ylabel("Average Reward")
-for i in range(len(avg_of_avg_rewards_for_epsilons_over_num_runs)):
-	plt.plot(avg_of_avg_rewards_for_epsilons_over_num_runs[i], label = "epsilon = " + str(epsilons[i]))
-	plt.legend(loc = "upper right")
+
+for i in range(len(avg_of_avg_rewards_for_epsilons_over_num_runs_epsilon_greedy)):
+	plt.plot(avg_of_avg_rewards_for_epsilons_over_num_runs_epsilon_greedy[i], label = "(ε-Greedy) ε = " + str(epsilons[i]))
+	plt.legend(loc = "lower right")
+for i in range(len(avg_of_avg_rewards_for_epsilons_over_num_runs_ucb_greedy)):
+	plt.plot(avg_of_avg_rewards_for_epsilons_over_num_runs_ucb_greedy[i], label = "(UCB-Greedy) ε = " + str(epsilons[i]) + ", confidence = 2")
+	plt.legend(loc = "lower right")
 plt.show()
 
 

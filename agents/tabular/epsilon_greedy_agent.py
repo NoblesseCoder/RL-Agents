@@ -1,5 +1,4 @@
 import numpy as np
-import logging
 from tabular.agent import Agent
 
 
@@ -15,8 +14,8 @@ class EpsilonGreedyAgent(Agent):
 		self.epsilon = epsilon
 		self.init_bias = init_bias # initial bias, provide greater values to encourage exploration at begining
 		
-		self.Q_actions = [self.init_bias for i in range(n_actions)]	# stores action value estimates
-		self.N_actions = [0 for i in range(n_actions)]	# stores number of time each action taken until current timestep
+		self.Q_actions = [self.init_bias for i in range(self.n_actions)]	# stores action value estimates
+		self.N_actions = [0 for i in range(self.n_actions)]	# stores number of time each action taken until current timestep
 		
 	def explore(self):
 		# Exploration (non-greedy): choose action randomly from the available action space
@@ -30,6 +29,7 @@ class EpsilonGreedyAgent(Agent):
 
 	def act(self, state, reward, done):
 		# Return chosen action 
+
 		probability = np.random.rand()
 		if (probability < self.epsilon):
 			action = self.explore()
@@ -39,3 +39,11 @@ class EpsilonGreedyAgent(Agent):
 		self.N_actions[action] += 1
 		self.Q_actions[action] += (reward - self.Q_actions[action]) / float(self.N_actions[action])  
 		return(action)
+
+	def reset_memory(self, epsilon, init_bias):
+		# Reset memory & set new epsion & bias values
+		
+		self.epsilon = epsilon
+		self.init_bias = init_bias
+		self.Q_actions = [self.init_bias for i in range(self.n_actions)]
+		self.N_actions = [0 for i in range(self.n_actions)]
