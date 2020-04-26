@@ -1,5 +1,5 @@
-# RL-Agents
-The repo contains implementations of various Reinforcement Learning Agents.
+# Reinforcei
+This repo contains implementation of various Reinforcement Learning Agents (algorithms) and their usage to solve Reinforcement Learning problems (environments).
 
 ### Prerequisite Installations
 
@@ -9,10 +9,11 @@ The repo contains implementations of various Reinforcement Learning Agents.
 
 ### Basic Agents
 
-1. [Random agent (default)](./agents/tabular/agent.py)
+1. [Random agent ](./agents/tabular/agent.py)
 2. [Human agent](./agents/tabular/human_agent.py)
-3. [Basic ε-greedy agent](./agents/tabular/epsilon_greedy_agent.py) [(Demo)](./demo/stationary_MAB_problem.py)
+3. [ε-greedy agent](./agents/tabular/epsilon_greedy_agent.py) [(Demo)](./demos/stationary_MAB_problem.py)
+4. [UCB greedy agent](./agents/tabular/upper_confidence_bound_agent) [(Demo)](./demos/stationary_MAB_problem.py)
 
 ### References
 
-[1] Reinforcement Learning: An Introduction, Richard S. Sutton & Andrew G. Barto (second edition)
+[1] [Reinforcement Learning, Second Edition: An Introduction)](https://mitpress.mit.edu/books/reinforcement-learning-second-edition)
