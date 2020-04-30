@@ -12,7 +12,7 @@ This repo contains implementation of various Reinforcement Learning Agents (algo
 1. [Random agent ](./agents/tabular/agent.py)
 2. [Human agent](./agents/tabular/human_agent.py)
 3. [ε-greedy agent](./agents/tabular/epsilon_greedy_agent.py) [(Demo)](./demos/stationary_MAB_problem.py)
-4. [UCB greedy agent](./agents/tabular/upper_confidence_bound_agent) [(Demo)](./demos/stationary_MAB_problem.py)
+4. [UCB greedy agent](./agents/tabular/upper_confidence_bound_agent.py) [(Demo)](./demos/stationary_MAB_problem.py)
 
 ### References
 
