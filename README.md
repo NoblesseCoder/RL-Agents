@@ -1,5 +1,5 @@
 # Reinforcei
-This repo contains implementation of various Reinforcement Learning Agents (algorithms) and their usage to solve Reinforcement Learning problems (environments).
+The repository contains implementation of various Reinforcement Learning algorithms.
 
 ### Prerequisite Installations
 

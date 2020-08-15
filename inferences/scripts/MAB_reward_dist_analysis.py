@@ -35,5 +35,5 @@ plt.title("Reward distributions of " + str(n_actions) + " actions for MAB proble
 plt.xlabel("Action")
 plt.ylabel("Reward Distribution")
 sns.violinplot(data=np.array(global_reward_list).T)
-plt.savefig("MAB_reward_dist_plot.jpg")
+#plt.savefig("MAB_reward_dist_plot.jpg")
 plt.show()
